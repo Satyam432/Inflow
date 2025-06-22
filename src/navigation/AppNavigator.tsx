@@ -178,7 +178,6 @@ const AppStack = () => {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Notifications" component={NotificationsScreen} />
         <Stack.Screen name="PaymentHistory" component={PaymentHistoryScreen} />
-        <Stack.Screen name="Subscription" component={SubscriptionScreen} />
       </Stack.Group>
       
       {/* Creator-specific screens */}
@@ -204,9 +203,22 @@ const AppStack = () => {
 export const AppNavigator: React.FC = () => {
   const { isAuthenticated, user } = useAppStore();
 
+  // Enhanced debug logging
+  const shouldShowMainApp = isAuthenticated && user?.isOnboardingComplete;
+  
+  console.log('🚀 AppNavigator render:', {
+    isAuthenticated,
+    userRole: user?.role,
+    isOnboardingComplete: user?.isOnboardingComplete,
+    subscriptionPlan: user?.subscriptionPlan,
+    userId: user?.id,
+    shouldShowMainApp,
+    timestamp: new Date().toISOString()
+  });
+
   return (
     <NavigationContainer>
-      {!isAuthenticated || !user?.isOnboardingComplete ? (
+      {!shouldShowMainApp ? (
         <AuthStack />
       ) : (
         <AppStack />

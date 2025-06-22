@@ -14,6 +14,14 @@ const SubscriptionScreen: React.FC = () => {
   const { user, updateUser, setLoading, isLoading, setAuthenticated } = useAppStore();
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan>('trial');
 
+  // Debug logging
+  console.log('🔄 SubscriptionScreen render:', {
+    userRole: user?.role,
+    isOnboardingComplete: user?.isOnboardingComplete,
+    selectedPlan,
+    isLoading
+  });
+
   const plans = [
     {
       id: 'trial',
@@ -69,37 +77,106 @@ const SubscriptionScreen: React.FC = () => {
     
     try {
       if (selectedPlan === 'trial') {
-        // Start trial immediately
+        // ✅ 1. Calculate trial expiry
+        const trialExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days trial
+        
+        console.log('Starting trial activation...');
+        
+        // ✅ 2. Update user state with subscription details AND onboarding completion
         updateUser({ 
           subscriptionPlan: 'trial',
-          subscriptionExpiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          subscriptionExpiry: trialExpiry,
           isOnboardingComplete: true
         });
+        
+        console.log('User state updated, setting authenticated...');
+        
+        // ✅ 3. Set authenticated immediately after user update
         setAuthenticated(true);
+        setLoading(false);
+        
+        console.log('Authentication set, navigation should happen automatically...');
+        
+        // ✅ 4. Show success message after navigation occurs
+        setTimeout(() => {
+          Alert.alert(
+            'Welcome to Inflo! 🎉',
+            `Your 7-day free trial has started. ${
+              user?.role === 'creator' 
+                ? 'Start discovering campaigns and grow your influence!' 
+                : 'Start finding creators and launch your campaigns!'
+            }`,
+            [
+              {
+                text: 'Let\'s Go!',
+                onPress: () => {
+                  console.log(`Trial activated for ${user?.role}: navigation complete`);
+                }
+              }
+            ]
+          );
+        }, 1000);
+        
       } else {
-        // For paid plans, you would integrate with Stripe/payment processing here
+        // For paid plans - integrate with payment processing
         Alert.alert(
           'Payment Integration',
-          'Payment processing would be implemented here with Stripe/Razorpay',
+          'Payment processing would be implemented here with Stripe/Razorpay integration.',
           [
             {
               text: 'Skip for Demo',
               onPress: () => {
+                // Demo: treat as successful payment
+                const subscriptionExpiry = selectedPlan === 'monthly' 
+                  ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
+                  : new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(); // 365 days
+                
                 updateUser({ 
                   subscriptionPlan: selectedPlan,
-                  subscriptionExpiry: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+                  subscriptionExpiry: subscriptionExpiry,
                   isOnboardingComplete: true
                 });
+                
                 setAuthenticated(true);
+                setLoading(false);
+                
+                setTimeout(() => {
+                  Alert.alert(
+                    'Subscription Activated! 🎉',
+                    `Your ${selectedPlan} subscription is now active. Welcome to Inflo!`,
+                    [
+                      {
+                        text: 'Start Exploring',
+                        onPress: () => {
+                          console.log(`Paid subscription activated for ${user?.role}`);
+                        }
+                      }
+                    ]
+                  );
+                }, 1000);
               }
+            },
+            {
+              text: 'Cancel',
+              style: 'cancel',
+              onPress: () => setLoading(false)
             }
           ]
         );
       }
     } catch (error) {
-      Alert.alert('Error', 'Something went wrong. Please try again.');
-    } finally {
+      console.error('Subscription error:', error);
       setLoading(false);
+      Alert.alert(
+        'Subscription Error',
+        'Something went wrong while setting up your subscription. Please try again.',
+        [
+          {
+            text: 'Retry',
+            onPress: () => setLoading(false)
+          }
+        ]
+      );
     }
   };
 

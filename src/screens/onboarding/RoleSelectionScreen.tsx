@@ -9,10 +9,23 @@ const { width, height } = Dimensions.get('window');
 
 const RoleSelectionScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { updateUser } = useAppStore();
+  const { user, setUser, updateUser } = useAppStore();
 
   const handleRoleSelection = (role: UserRole) => {
-    updateUser({ role });
+    console.log('🎭 Role selected:', role);
+    
+    if (user) {
+      // Update existing user
+      updateUser({ role });
+    } else {
+      // Create new user with role
+      setUser({
+        id: 'temp-' + Date.now(),
+        role,
+        isOnboardingComplete: false,
+      });
+    }
+    
     navigation.navigate('PhoneVerification' as never);
   };
 

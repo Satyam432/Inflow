@@ -3,14 +3,14 @@ import { Campaign, CreatorProfile, User } from '../store';
 
 const API_BASE_URL = __DEV__ ? 'http://localhost:3000/api' : 'https://api.inflo.app';
 
-// Mock data for development
+// Enhanced mock data with more variety and random images
 const mockCampaigns: Campaign[] = [
   {
     id: '1',
     brandId: 'brand1',
     title: 'Summer Fashion Collection',
-    description: 'Promote our latest summer fashion collection with trendy outfits',
-    imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400',
+    description: 'Promote our latest summer fashion collection with trendy outfits. Looking for fashion influencers who can showcase our styles.',
+    imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
     requirements: 'Fashion-focused content creators with minimum 10K followers',
     minFollowers: 10000,
     deliverables: ['Instagram Post', 'Instagram Story', 'Reel'],
@@ -26,8 +26,8 @@ const mockCampaigns: Campaign[] = [
     id: '2',
     brandId: 'brand2',
     title: 'Tech Gadget Review',
-    description: 'Review our latest smart home gadgets',
-    imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400',
+    description: 'Review our latest smart home gadgets and AI-powered devices. Perfect for tech enthusiasts.',
+    imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
     requirements: 'Tech reviewers with authentic engagement',
     minFollowers: 5000,
     deliverables: ['YouTube Video', 'Instagram Post'],
@@ -43,13 +43,64 @@ const mockCampaigns: Campaign[] = [
     id: '3',
     brandId: 'brand3',
     title: 'Fitness Challenge',
-    description: 'Join our 30-day fitness challenge and inspire others',
-    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400',
+    description: 'Join our 30-day fitness challenge and inspire others to live healthier lives.',
+    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
     requirements: 'Fitness influencers with motivational content',
     minFollowers: 15000,
     deliverables: ['Instagram Posts', 'Stories', 'Live Session'],
     affiliatePercentage: 12,
     budget: 8000,
+    timeline: '1 month',
+    status: 'active',
+    applicants: [],
+    approvedCreators: [],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: '4',
+    brandId: 'brand4',
+    title: 'Sustainable Living Products',
+    description: 'Showcase eco-friendly products and sustainable living tips to promote environmental awareness.',
+    imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=300&fit=crop',
+    requirements: 'Eco-conscious creators passionate about sustainability',
+    minFollowers: 8000,
+    deliverables: ['Instagram Posts', 'Stories', 'Blog Post'],
+    affiliatePercentage: 18,
+    budget: 4500,
+    timeline: '3 weeks',
+    status: 'active',
+    applicants: [],
+    approvedCreators: [],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: '5',
+    brandId: 'brand5',
+    title: 'Food & Recipe Challenge',
+    description: 'Create delicious content featuring our organic ingredients and kitchen tools.',
+    imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop',
+    requirements: 'Food bloggers and cooking enthusiasts',
+    minFollowers: 12000,
+    deliverables: ['Recipe Videos', 'Instagram Posts', 'Stories'],
+    affiliatePercentage: 16,
+    budget: 6000,
+    timeline: '2 weeks',
+    status: 'active',
+    applicants: [],
+    approvedCreators: [],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: '6',
+    brandId: 'brand6',
+    title: 'Travel Adventure Gear',
+    description: 'Test and showcase our travel gear in real adventure scenarios.',
+    imageUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop',
+    requirements: 'Travel bloggers and adventure seekers',
+    minFollowers: 20000,
+    deliverables: ['Travel Videos', 'Instagram Posts', 'Blog Review'],
+    affiliatePercentage: 14,
+    budget: 10000,
     timeline: '1 month',
     status: 'active',
     applicants: [],
@@ -64,7 +115,7 @@ const mockCreators: CreatorProfile[] = [
     name: 'Sarah Fashion',
     category: 'Fashion',
     followerCount: 25000,
-    imageUrl: 'https://images.unsplash.com/photo-1494790108755-2616b9c0bbc8?w=200',
+    imageUrl: 'https://images.unsplash.com/photo-1494790108755-2616b9c0bbc8?w=200&h=200&fit=crop',
     instagramLink: '@sarahfashion',
     rating: 4.8,
     completedCampaigns: 12,
@@ -74,7 +125,7 @@ const mockCreators: CreatorProfile[] = [
     name: 'Tech Mike',
     category: 'Technology',
     followerCount: 15000,
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200',
+    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
     instagramLink: '@techmike',
     rating: 4.9,
     completedCampaigns: 8,
@@ -84,10 +135,30 @@ const mockCreators: CreatorProfile[] = [
     name: 'Fitness Anna',
     category: 'Fitness',
     followerCount: 30000,
-    imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200',
+    imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop',
     instagramLink: '@fitnessanna',
     rating: 4.7,
     completedCampaigns: 20,
+  },
+  {
+    id: 'creator4',
+    name: 'Eco Emma',
+    category: 'Lifestyle',
+    followerCount: 18000,
+    imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop',
+    instagramLink: '@ecoemma',
+    rating: 4.6,
+    completedCampaigns: 15,
+  },
+  {
+    id: 'creator5',
+    name: 'Chef Carlos',
+    category: 'Food',
+    followerCount: 22000,
+    imageUrl: 'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=200&h=200&fit=crop',
+    instagramLink: '@chefcarlos',
+    rating: 4.9,
+    completedCampaigns: 18,
   },
 ];
 
@@ -147,11 +218,25 @@ export const apiService = {
     return { success: true };
   },
 
-  // Campaigns
-  async getCampaigns(filters?: { category?: string; minBudget?: number }): Promise<Campaign[]> {
+  // Post-Trial Campaign Endpoints
+  async getCampaigns(filters?: { 
+    status?: string; 
+    brandId?: string; 
+    category?: string; 
+    minBudget?: number;
+    creatorRelevant?: boolean;
+  }): Promise<Campaign[]> {
     await new Promise(resolve => setTimeout(resolve, 800));
     
     let campaigns = [...mockCampaigns];
+    
+    if (filters?.status) {
+      campaigns = campaigns.filter(c => c.status === filters.status);
+    }
+    
+    if (filters?.brandId) {
+      campaigns = campaigns.filter(c => c.brandId === filters.brandId);
+    }
     
     if (filters?.category) {
       campaigns = campaigns.filter(c => c.title.toLowerCase().includes(filters.category!.toLowerCase()));
@@ -160,8 +245,26 @@ export const apiService = {
     if (filters?.minBudget) {
       campaigns = campaigns.filter(c => c.budget >= filters.minBudget!);
     }
+
+    if (filters?.creatorRelevant) {
+      // Shuffle campaigns for variety
+      campaigns = campaigns.sort(() => Math.random() - 0.5);
+    }
     
     return campaigns;
+  },
+
+  // Campaign Application - POST /campaigns/:id/apply
+  async applyCampaign(campaignId: string, creatorId: string, message?: string): Promise<{ success: boolean; error?: string }> {
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    const campaign = mockCampaigns.find(c => c.id === campaignId);
+    if (campaign && !campaign.applicants.includes(creatorId)) {
+      campaign.applicants.push(creatorId);
+      console.log(`Applied to campaign: ${campaign.title}${message ? ` with message: ${message}` : ''}`);
+    }
+    
+    return { success: true };
   },
 
   async createCampaign(campaignData: Omit<Campaign, 'id' | 'createdAt' | 'applicants' | 'approvedCreators'>): Promise<{ success: boolean; campaign?: Campaign; error?: string }> {
@@ -177,17 +280,6 @@ export const apiService = {
     
     mockCampaigns.push(campaign);
     return { success: true, campaign };
-  },
-
-  async applyCampaign(campaignId: string, creatorId: string): Promise<{ success: boolean; error?: string }> {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const campaign = mockCampaigns.find(c => c.id === campaignId);
-    if (campaign && !campaign.applicants.includes(creatorId)) {
-      campaign.applicants.push(creatorId);
-    }
-    
-    return { success: true };
   },
 
   async approveCampaignApplication(campaignId: string, creatorId: string): Promise<{ success: boolean; affiliateLink?: string; error?: string }> {

@@ -19,29 +19,39 @@ function ErrorFallback({ error }: { error: Error }) {
   );
 }
 
-function AppWithDebug() {
+function AppWithReset() {
   const { clearAllData, isAuthenticated, user } = useAppStore();
 
   return (
     <>
-      {/* Debug button - remove in production */}
+      {/* Reset button for testing - appears when user is authenticated */}
       {(isAuthenticated && user?.isOnboardingComplete) && (
         <View style={{ 
           position: 'absolute', 
           top: 50, 
           right: 20, 
           zIndex: 1000, 
-          backgroundColor: 'rgba(0,0,0,0.8)', 
-          borderRadius: 8,
-          padding: 8 
+          backgroundColor: 'rgba(255, 87, 88, 0.9)', 
+          borderRadius: 12,
+          padding: 12,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
         }}>
           <Button 
             mode="contained" 
-            onPress={clearAllData}
+            onPress={() => {
+              console.log('🔄 Resetting app to show onboarding...');
+              clearAllData();
+            }}
             style={{ backgroundColor: '#FF5758' }}
-            labelStyle={{ fontSize: 10 }}
+            labelStyle={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}
+            icon="refresh"
+            compact
           >
-            Reset App
+            Reset to Onboarding
           </Button>
         </View>
       )}
@@ -52,12 +62,12 @@ function AppWithDebug() {
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <PaperProvider theme={theme}>
         <SafeAreaProvider>
-          <AppWithDebug />
+          <AppWithReset />
         </SafeAreaProvider>
-      </ErrorBoundary>
-    </PaperProvider>
+      </PaperProvider>
+    </ErrorBoundary>
   );
 } 

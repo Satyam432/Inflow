@@ -30,6 +30,9 @@ const ProfileSetupScreen: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    console.log('📝 Profile setup - current user:', user);
+    console.log('📝 Profile setup - form data:', formData);
+    
     if (!formData.name || !formData.email || !formData.category) {
       Alert.alert('Error', 'Please fill in all required fields');
       return;
@@ -51,9 +54,12 @@ const ProfileSetupScreen: React.FC = () => {
         ...user,
         ...formData,
       };
+      
+      console.log('📝 Sending user data to API:', userData);
 
       const response = await apiService.createUser(userData);
       if (response.success && response.user) {
+        console.log('📝 API response user:', response.user);
         setUser(response.user);
         navigation.navigate('Subscription' as never);
       } else {

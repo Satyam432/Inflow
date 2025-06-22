@@ -108,7 +108,9 @@ export const useAppStore = create<AppState>()(
       updateUser: (updates) => {
         const currentUser = get().user;
         if (currentUser) {
-          set({ user: { ...currentUser, ...updates } });
+          const updatedUser = { ...currentUser, ...updates };
+          set({ user: updatedUser });
+          console.log('📱 User updated:', updatedUser);
         }
       },
       setAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
@@ -174,6 +176,14 @@ export const useAppStore = create<AppState>()(
         campaigns: state.campaigns,
         appliedCampaigns: state.appliedCampaigns,
       }),
+      onRehydrateStorage: () => (state) => {
+        console.log('💾 Store rehydrated:', state ? {
+          hasUser: !!state.user,
+          isAuthenticated: state.isAuthenticated,
+          userRole: state.user?.role,
+          isOnboardingComplete: state.user?.isOnboardingComplete
+        } : 'no state');
+      },
     }
   )
 ); 
