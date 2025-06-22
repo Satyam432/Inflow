@@ -1,76 +1,63 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ErrorBoundary } from 'react-error-boundary';
-import { ActivityIndicator, View } from 'react-native';
+import React from 'react';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { MainTabs } from './navigation/MainTabs';
-import { OnboardingScreen } from './screens/OnboardingScreen';
-import { PhoneVerificationScreen } from './screens/PhoneVerificationScreen';
-import { UserDetailsScreen } from './screens/UserDetailsScreen';
-import { CategorySelectionScreen } from './screens/CategorySelectionScreen';
-import { InstagramConnectScreen } from './screens/InstagramConnectScreen';
-import { SubscriptionScreen } from './screens/SubscriptionScreen';
-import { RootStackParamList } from './types/navigation';
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
+import { ErrorBoundary } from 'react-error-boundary';
+import { View, Text } from 'react-native';
+import { Button } from 'react-native-paper';
+import { AppNavigator } from './src/navigation/AppNavigator';
+import { useAppStore } from './src/store';
+import { theme } from './theme';
 
 function ErrorFallback({ error }: { error: Error }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: 'red' }}>Something went wrong:</Text>
-      <Text>{error.message}</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+      <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
+        Something went wrong:
+      </Text>
+      <Text style={{ color: '#333', textAlign: 'center' }}>{error.message}</Text>
     </View>
   );
 }
 
-function LoadingScreen() {
+function AppWithDebug() {
+  const { clearAllData, isAuthenticated, user } = useAppStore();
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ActivityIndicator size="large" color="#007AFF" />
-    </View>
+    <>
+      {/* Debug button - remove in production */}
+      {(isAuthenticated && user?.isOnboardingComplete) && (
+        <View style={{ 
+          position: 'absolute', 
+          top: 50, 
+          right: 20, 
+          zIndex: 1000, 
+          backgroundColor: 'rgba(0,0,0,0.8)', 
+          borderRadius: 8,
+          padding: 8 
+        }}>
+          <Button 
+            mode="contained" 
+            onPress={clearAllData}
+            style={{ backgroundColor: '#FF5758' }}
+            labelStyle={{ fontSize: 10 }}
+          >
+            Reset App
+          </Button>
+        </View>
+      )}
+      <AppNavigator />
+    </>
   );
 }
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate initial loading
-    setTimeout(() => setIsLoading(false), 1000);
-  }, []);
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator 
-            initialRouteName="Onboarding"
-            screenOptions={{ 
-              headerShown: false,
-              animation: 'slide_from_right'
-            }}
-          >
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-            <Stack.Screen name="PhoneVerification" component={PhoneVerificationScreen} />
-            <Stack.Screen name="UserDetails" component={UserDetailsScreen} />
-            <Stack.Screen name="CategorySelection" component={CategorySelectionScreen} />
-            <Stack.Screen name="InstagramConnect" component={InstagramConnectScreen} />
-            <Stack.Screen name="Subscription" component={SubscriptionScreen} />
-            <Stack.Screen 
-              name="MainTabs" 
-              component={MainTabs}
-              options={{
-                gestureEnabled: false,
-                animation: 'fade'
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </ErrorBoundary>
+    <PaperProvider theme={theme}>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <SafeAreaProvider>
+          <AppWithDebug />
+        </SafeAreaProvider>
+      </ErrorBoundary>
+    </PaperProvider>
   );
 } 
